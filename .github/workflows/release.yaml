@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  build:
+    uses: ./.github/workflows/release-base.yaml
+    strategy:
+      matrix:
+        distribution:
+          - nr-otel-collector
+          - nrdot-collector-host
+    with:
+      distribution: ${{ matrix.distribution }}
+    secrets:
+      docker_hub_username: ${{ secrets.OTELCOMM_DOCKER_HUB_USERNAME }}
+      docker_hub_password: ${{ secrets.OTELCOMM_DOCKER_HUB_PASSWORD }}
+      gpg_private_key: ${{ secrets.OTELCOMM_GPG_PRIVATE_KEY_BASE64 }}
+      gpg_passphrase: ${{ secrets.OTELCOMM_GPG_PASSPHRASE }}
+      github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  draft-release:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.23'
+      
+
+      - name: Build binaries & packages with GoReleaser
+        id: goreleaser
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser
+          version: '~> v2'
+          args: --clean --timeout 2h
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        

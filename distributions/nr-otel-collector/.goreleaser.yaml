@@ -1,7 +1,11 @@
 version: 2
 project_name: nrdot-collector-releases
 release:
-  disable: "true"
+  draft: true
+  use_existing_draft: true
+  skip_upload: "false"
+  mode: append
+  replace_existing_artifacts: true
 builds:
   - id: nr-otel-collector
     goos:
@@ -77,8 +81,9 @@ dockers:
     goarch: amd64
     dockerfile: Dockerfile
     image_templates:
-      - newrelic/nr-otel-collector:{{ .Version }}-amd64
-      - newrelic/nr-otel-collector:latest-amd64
+      - marsac770/nr-otel-collector:{{ .Version }}-amd64
+      - marsac770/nr-otel-collector:latest-amd64
+    skip_push: "true"
     extra_files:
       - config.yaml
     build_flag_templates:
@@ -95,8 +100,9 @@ dockers:
     goarch: arm64
     dockerfile: Dockerfile
     image_templates:
-      - newrelic/nr-otel-collector:{{ .Version }}-arm64
-      - newrelic/nr-otel-collector:latest-arm64
+      - marsac770/nr-otel-collector:{{ .Version }}-arm64
+      - marsac770/nr-otel-collector:latest-arm64
+    skip_push: "true"
     extra_files:
       - config.yaml
     build_flag_templates:
@@ -110,19 +116,16 @@ dockers:
       - --label=org.opencontainers.image.licenses=Apache-2.0
     use: buildx
 docker_manifests:
-  - name_template: newrelic/nr-otel-collector:{{ .Version }}
+  - name_template: marsac770/nr-otel-collector:{{ .Version }}
+    skip_push: "true"
     image_templates:
-      - newrelic/nr-otel-collector:{{ .Version }}-amd64
-      - newrelic/nr-otel-collector:{{ .Version }}-arm64
-  - name_template: newrelic/nr-otel-collector:latest
+      - marsac770/nr-otel-collector:{{ .Version }}-amd64
+      - marsac770/nr-otel-collector:{{ .Version }}-arm64
+  - name_template: marsac770/nr-otel-collector:latest
+    skip_push: "true"
     image_templates:
-      - newrelic/nr-otel-collector:latest-amd64
-      - newrelic/nr-otel-collector:latest-arm64
-blobs:
-  - bucket: nr-releases
-    provider: s3
-    region: us-east-1
-    directory: nrdot-collector-releases/nr-otel-collector/{{ .Version }}
+      - marsac770/nr-otel-collector:latest-amd64
+      - marsac770/nr-otel-collector:latest-arm64
 changelog:
   disable: "true"
 signs:

@@ -1,0 +1,14 @@
+version: 2
+builds:
+  - skip: true
+release:
+  draft: true
+  use_existing_draft: true
+  mode: replace
+  # skip_upload: false
+  replace_existing_artifacts: true
+  # extra_files:
+  #   - glob: ./artifacts/*
+  #   - glob: ./artifacts/**/*
+  header: |
+    Check the [{{.Version}} contrib changelog](https://github.com/newrelic/opentelemetry-collector-contrib/releases/tags/v{{.Version}}) and the [v{{.Version}} core changelog](https://github.com/newrelic/opentelemetry-collector-releases/releases/tags/{{.Version}}) for changelogs on specific components.

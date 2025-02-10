@@ -3,6 +3,7 @@ vendor
 **/collections
 **/roles
 dist/
+artifacts/
 .idea
 .generated-yaml/
 .vscode
@@ -22,3 +23,4 @@ ci/terraform/caos.auto.tfvars
 .secrets
 .input
 .tools
+.tmp

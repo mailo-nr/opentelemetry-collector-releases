@@ -32,7 +32,7 @@ const (
 	HostDistro   = "nrdot-collector-host"
 	K8sDistro    = "nrdot-collector-k8s"
 
-	DockerHub   = "newrelic"
+	DockerHub   = "marsac770"
 	EnvRegistry = "{{ .Env.REGISTRY }}"
 
 	BinaryNamePrefix = "nrdot-collector"
@@ -76,10 +76,15 @@ func Generate(dist string, nightly bool) config.Project {
 		Snapshot: config.Snapshot{
 			VersionTemplate: "{{ incpatch .Version }}-SNAPSHOT-{{.ShortCommit}}",
 		},
-		Blobs: Blobs(dist, nightly),
+		
 		Release: config.Release{
 			// Disable releases on all distros for now
-			Disable: "true",
+			// Disable: "true",
+			Draft: true,
+			SkipUpload: "false",
+			ReplaceExistingArtifacts: true,
+			ReleaseNotesMode: "append",
+			UseExistingDraft: true,
 		},
 	}
 }
@@ -300,7 +305,7 @@ func DockerImage(dist string, nightly bool, arch string, armVersion string) conf
 	return config.Docker{
 		ImageTemplates: imageTemplates,
 		Dockerfile:     "Dockerfile",
-
+		SkipPush: "true",
 		Use: "buildx",
 		BuildFlagTemplates: []string{
 			"--pull",
@@ -374,7 +379,9 @@ func DockerManifest(prefix, version, dist string, nightly bool) config.DockerMan
 
 	return config.DockerManifest{
 		NameTemplate:   fmt.Sprintf("%s/%s:%s", prefix, imageName(dist), version),
+		SkipPush: "true",
 		ImageTemplates: imageTemplates,
+		
 	}
 }
 

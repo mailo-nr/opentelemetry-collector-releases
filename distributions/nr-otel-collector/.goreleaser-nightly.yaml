@@ -1,7 +1,11 @@
 version: 2
 project_name: nrdot-collector-releases-nightly
 release:
-  disable: "true"
+  draft: true
+  use_existing_draft: true
+  skip_upload: "false"
+  mode: append
+  replace_existing_artifacts: true
 builds:
   - id: nr-otel-collector
     goos:
@@ -79,6 +83,7 @@ dockers:
     image_templates:
       - '{{ .Env.REGISTRY }}/nr-otel-collector:{{ .Version }}-nightly-amd64'
       - '{{ .Env.REGISTRY }}/nr-otel-collector:nightly-amd64'
+    skip_push: "true"
     extra_files:
       - config.yaml
     build_flag_templates:
@@ -97,6 +102,7 @@ dockers:
     image_templates:
       - '{{ .Env.REGISTRY }}/nr-otel-collector:{{ .Version }}-nightly-arm64'
       - '{{ .Env.REGISTRY }}/nr-otel-collector:nightly-arm64'
+    skip_push: "true"
     extra_files:
       - config.yaml
     build_flag_templates:
@@ -111,14 +117,10 @@ dockers:
     use: buildx
 docker_manifests:
   - name_template: '{{ .Env.REGISTRY }}/nr-otel-collector:nightly'
+    skip_push: "true"
     image_templates:
       - '{{ .Env.REGISTRY }}/nr-otel-collector:nightly-amd64'
       - '{{ .Env.REGISTRY }}/nr-otel-collector:nightly-arm64'
-blobs:
-  - bucket: nr-releases
-    provider: s3
-    region: us-east-1
-    directory: nrdot-collector-releases/nr-otel-collector/nightly
 changelog:
   disable: "true"
 signs:
