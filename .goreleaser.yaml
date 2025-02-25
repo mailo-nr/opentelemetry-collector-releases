@@ -5,6 +5,27 @@ release:
   draft: true
   use_existing_draft: true
   mode: replace
+  header: |
+    ###### REMOVE THIS HEADER BEFORE RELEASE ##################
+    ## Release Checklist
+    ### Draft Checklist
+    - [ ] Tests from last nightly build have passed and are stable.
+    - [ ] Release notes below have been reviewed and edited as needed.
+    - [ ] Binaries from each distro have been built and are attached to the release.
+      - [ ] nrdot-collector-host
+      - [ ] nrdot-collector-k8s
+    - [ ] Docker images for each distro have been published to docker hub
+      - [ ] [nrdot-collector-host](https://hub.docker.com/repository/docker/newrelic/nrdot-collector-host/tags) image published and tagged
+      - [ ] [nrdot-collector-k8s](https://hub.docker.com/repository/docker/newrelic/nrdot-collector-k8s/tags) image published and tagged
+    - [ ] Docker images for each distro have been published to New Relic registry
+    - [ ] Slack notifications have been sent to appropriate channels
+    ### Release Checklist
+    - [ ] Release has been published
+    - [ ] Docker images for each distro have been tagged as latest
+      - [ ] [nrdot-collector-host](https://hub.docker.com/repository/docker/newrelic/nrdot-collector-host/tags) version {{ .Version }} tagged as latest
+      - [ ] [nrdot-collector-k8s](https://hub.docker.com/repository/docker/newrelic/nrdot-collector-k8s/tags) version {{ .Version }} tagged as latest
+    ###### REMOVE THIS HEADER BEFORE RELEASE ##################
+
 changelog:
   sort: asc
   use: github
@@ -30,3 +51,4 @@ changelog:
       - "^build"
       - "^revert"
       - "^deps"
+  
